@@ -45,3 +45,7 @@ run_model = models.MyBase()
 run_model.Creation()
 
 """Local controler class execution"""
+
+in_model = ModelMy()
+
+in_view = ViewMy()
