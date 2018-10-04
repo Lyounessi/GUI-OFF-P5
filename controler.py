@@ -42,7 +42,7 @@ run_it.win.mainloop()
 """Model run and execution"""
 
 run_model = models.MyBase()
-run_model.Creation()
+run_model.CreatMyDB()
 
 """Local controler class execution"""
 
