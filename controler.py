@@ -9,6 +9,8 @@ from tkinter import *
 from tkinter import ttk 
 from tkinter import scrolledtext
 from tkinter import messagebox as mBox
+import connect
+
 
 """Starting Classes"""
 

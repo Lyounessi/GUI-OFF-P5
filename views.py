@@ -5,7 +5,7 @@ from tkinter import *
 from tkinter import ttk 
 from tkinter import scrolledtext
 from tkinter import messagebox as mBox
-
+import connect
 
 """Class content all widgets indeed"""
 #The new OOP code looks like this:
