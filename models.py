@@ -9,13 +9,13 @@ from connect import cursor
 class MyBase():
     
     def __init__(self):
-        self.db = "CREATE DATABASE IF NOT EXISTS Off_data"   
+        #self.db = "CREATE DATABASE IF NOT EXISTS Off_data"   
+        
+        #Define cursor for pymysql controls
         self.cursor = connect.cursor
         
           
         
     def CreatMyDB(self):
-        
-        
         self.cursor.execute(self.db)
        

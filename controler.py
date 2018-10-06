@@ -12,12 +12,18 @@ from tkinter import messagebox as mBox
 import connect
 
 
+
 """Starting Classes"""
 
 class ModelMy():
-    pass
+    
+    def __init__(self):
+            
+        self.req = requests.get("https://fr.openfoodfacts.org/categorie/riz-souffle.json")
+        self.result = self.req.json() 
 
-
+    def Testing(self):
+        print(self.req.status_code)
 
 
 
@@ -49,5 +55,6 @@ run_model.CreatMyDB()
 """Local controler class execution"""
 
 in_model = ModelMy()
+in_model.Testing()
 
 in_view = ViewMy()
