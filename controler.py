@@ -2,6 +2,7 @@ import views
 from views import MyApp
 import models
 from models import *
+from models import Cat
 import requests
 import pymysql.cursors
 import tkinter as tk # 1 imports
@@ -14,9 +15,7 @@ import connect
 
 
 """Starting Classes"""
-
-class ModelMy():
-    
+class ApiMy():
     def __init__(self):
             
         self.req = requests.get("https://fr.openfoodfacts.org/categorie/riz-souffle.json")
@@ -26,6 +25,16 @@ class ModelMy():
         print(self.req.status_code)
 
 
+
+class ModelMy():
+    
+    def __init__(self):
+        self.cursor = connect.cursor
+        self.cat = Cat()
+        
+        
+    def CreatMyClass(self):
+        self.cursor.execute(self.cat.creat)
 
 
 
@@ -50,11 +59,17 @@ run_it.win.mainloop()
 """Model run and execution"""
 
 run_model = models.MyBase()
-run_model.CreatMyDB()
+#run_model.CreatMyDB()
 
 """Local controler class execution"""
 
-in_model = ModelMy()
-in_model.Testing()
+in_api = ApiMy()
+in_api.Testing()
+
+in_modelmy = ModelMy()
+in_modelmy.CreatMyClass()
+
+
+
 
 in_view = ViewMy()
