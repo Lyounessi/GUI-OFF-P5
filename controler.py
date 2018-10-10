@@ -1,3 +1,5 @@
+"""Imports Parts"""
+
 import views
 from views import MyApp
 import models
@@ -11,18 +13,23 @@ from tkinter import ttk
 from tkinter import scrolledtext
 from tkinter import messagebox as mBox
 import connect
-
+import constant
+from constant import *
 
 
 """Starting Classes"""
 class ApiMy():
     def __init__(self):
             
-        self.req = requests.get("https://fr.openfoodfacts.org/categorie/riz-souffle.json")
+        self.req = requests.get(BOISSON_URL)
         self.result = self.req.json() 
 
     def Testing(self):
         print(self.req.status_code)
+
+        
+    def insert_in(self):
+        pass
 
 
 
@@ -31,12 +38,13 @@ class ModelMy():
     def __init__(self):
         self.cursor = connect.cursor
         self.cat = Cat()
-        
+        self.prods = Products()
         
     def CreatMyClass(self):
-        self.cursor.execute(self.cat.creat)
-
-
+        #self.cursor.execute(self.cat.creat)
+        #self.cursor.execute(self.prods.creat)
+        self.cursor.executemany(self.cat.insert, self.cat.val)
+        connect.db.commit()
 
 
 
@@ -44,12 +52,7 @@ class ViewMy():
     pass
 
 
-
-
-
-
-
-
+print('yes')
 
 """View run and execution"""
 
