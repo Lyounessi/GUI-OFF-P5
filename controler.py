@@ -20,7 +20,7 @@ from constant import *
 """Starting Classes"""
 class ApiMy():
     def __init__(self):
-            
+        self.cursorr = connect.cursor
         self.req = requests.get(BOISSON_URL)
         self.result = self.req.json() 
 
@@ -29,7 +29,16 @@ class ApiMy():
 
         
     def insert_in(self):
-        pass
+        self.sql = ""
+        self.for_key = "SELECT id FROM categories WHERE cat_name = 'Boissons' "
+        for i in range(20):
+            self.sql = "INSERT INTO products (product_name, id_cat, stores_name, nutri_score, description, link) VALUES (%s, %s, %s, %s, %s, %s)"
+            val = (self.result["products"][i]["product_name"], self.for_key, self.result["products"][i]["stores_tags"], self.result["products"][i]["nutrition_grades_tags"], self.result["products"][i]["ingredients_text"],  self.result["products"][i]["url"])
+            self.cursorr.execute(self.sql, val)
+        
+            connect.db.commit()
+            
+        
 
 
 
@@ -44,7 +53,9 @@ class ModelMy():
         #self.cursor.execute(self.cat.creat)
         #self.cursor.execute(self.prods.creat)
         self.cursor.executemany(self.cat.insert, self.cat.val)
-        connect.db.commit()
+        #connect.db.commit()
+       
+        
 
 
 
@@ -68,6 +79,7 @@ run_model = models.MyBase()
 
 in_api = ApiMy()
 in_api.Testing()
+in_api.insert_in()
 
 in_modelmy = ModelMy()
 in_modelmy.CreatMyClass()

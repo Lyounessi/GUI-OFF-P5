@@ -39,3 +39,4 @@ class Cat():
             self.creat = "CREATE TABLE categories (id SMALLINT AUTO_INCREMENT, cat_name VARCHAR(55) NOT NULL, PRIMARY KEY (id))"
             self.insert = "INSERT INTO "+ T_CAT+"(cat_name) VALUES (%s)" 
             self.val=[('Fromages'),('Charcutries'),('Produits à tartiner'),('Boissons')]
+             
