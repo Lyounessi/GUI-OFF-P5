@@ -22,20 +22,31 @@ class ApiMy():
     def __init__(self):
         self.cursorr = connect.cursor
         self.req = requests.get(BOISSON_URL)
-        self.result = self.req.json() 
+        self.result = self.req.json()
+        self.cat = Cat()
+        self.my_products = []
 
     def Testing(self):
         print(self.req.status_code)
-
+    
+    
+    def list_append(self):
         
+        self.ex_for_key = 20
+        #append data in the list:
+        for i in range(20):
+            self.my_products.extend([self.result["products"][i]["product_name"], int(self.ex_for_key), self.result["products"][i]["stores_tags"], self.result["products"][i]["nutrition_grades_tags"], self.result["products"][i]["ingredients_tags"],  self.result["products"][i]["url"]])
+            
     def insert_in(self):
         self.sql = ""
-        self.for_key = 20
-        for i in range(20):
-            self.sql = "INSERT INTO products (product_name, id_cat, stores_name, nutri_score, description, link) VALUES (%s, %s, %s, %s, %s, %s)"
-            val = (self.result["products"][i]["product_name"], self.for_key, self.result["products"][i]["stores_tags"], self.result["products"][i]["nutrition_grades_tags"], self.result["products"][i]["ingredients_text"],  self.result["products"][i]["url"])
-            self.cursorr.execute(self.sql, val)
+        self.val = "" 
         
+        print(self.ex_for_key)
+        print(type(self.ex_for_key))
+        for i in self.my_products:
+            self.sql = "INSERT INTO products (product_name, id_cat, stores_name, nutri_score, description, link) VALUES ('%s', '%d', '%s', '%s', '%s', '%s')"
+            self.val = (i)
+            self.cursorr.executemany(self.sql, self.val)
         connect.db.commit()
             
         
@@ -79,7 +90,9 @@ run_model = models.MyBase()
 
 in_api = ApiMy()
 in_api.Testing()
-#in_api.insert_in()
+in_api.list_append()
+in_api.insert_in()
+
 
 in_modelmy = ModelMy()
 #in_modelmy.CreatMyClass()

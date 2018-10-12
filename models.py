@@ -26,7 +26,7 @@ class MyBase():
 class Products():
     
     def __init__(self):
-        self.creat = "CREATE TABLE products (id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, id_cat SMALLINT, stores_name VARCHAR(100), nutri_score VARCHAR(2), CONSTRAINT fk_id_cat FOREIGN KEY (id_cat) REFERENCES categories(id))"
+        self.creat = "CREATE TABLE products (id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, id_cat SMALLINT, stores_name VARCHAR(100), nutri_score VARCHAR(2), description VATCHAR(255), link VARCHAR(255), CONSTRAINT fk_id_cat FOREIGN KEY (id_cat) REFERENCES categories(id))"
 
 
 class Favorits():
@@ -39,4 +39,5 @@ class Cat():
             self.creat = "CREATE TABLE categories (id SMALLINT AUTO_INCREMENT, cat_name VARCHAR(55) NOT NULL, PRIMARY KEY (id))"
             self.insert = "INSERT INTO "+ T_CAT+"(cat_name) VALUES (%s)" 
             self.val=[('Fromages'),('Charcutries'),('Produits à tartiner'),('Boissons')]
+            self.for_key ="SELECT id FROM categories WHERE cat_name = 'Fromages'"
              

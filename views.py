@@ -37,8 +37,6 @@ class MyApp():
          # Tabe1 widgets
         monty = ttk.LabelFrame(tab1, text=' Liste des Produits ')
         monty.grid(column=0, row=1, padx=8, pady=4)
-        monty = ttk.LabelFrame(tab1, text=' Monty Python ')
-        monty.grid(column=0, row=1, padx=8, pady=4)
         ttk.Label(monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
         
         # widgets of the categories
@@ -67,3 +65,24 @@ class MyApp():
         #store_name
         ttk.Label(monty, text="Magasin :").grid(column=2, row=2,sticky='W')
         ttk.Label(monty, text="get store").grid(column=3, row=2,sticky='E')
+        
+        #secon section in tab1 for best products
+        monty1 = ttk.LabelFrame(tab1, text=' Meilleur Produit ')
+        monty1.grid(column=0, row=5, padx=8, pady=4)
+        ttk.Label(monty1, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
+        
+        #name
+        ttk.Label(monty1, text="Nom :").grid(column=0, row=1,sticky='W')
+        ttk.Label(monty1, text="get name").grid(column=1, row=1,sticky='W')
+        
+        #Link
+        ttk.Label(monty1, text="Lien :").grid(column=0, row=2,sticky='W')
+        ttk.Label(monty1, text="get link").grid(column=1, row=2,sticky='W')
+        
+        #nutrition_score
+        ttk.Label(monty1, text="Nutrition_score :").grid(column=2, row=1,sticky='W')
+        ttk.Label(monty1, text="get NT").grid(column=3, row=1,sticky='E')
+        
+        #store_name
+        ttk.Label(monty1, text="Magasin :").grid(column=2, row=2,sticky='W')
+        ttk.Label(monty1, text="get store").grid(column=3, row=2,sticky='E')
