@@ -26,18 +26,42 @@ class MyBase():
 class Products():
     
     def __init__(self):
-        self.creat = "CREATE TABLE products (id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, id_cat SMALLINT, stores_name VARCHAR(100), nutri_score VARCHAR(2), description VATCHAR(255), link VARCHAR(255), CONSTRAINT fk_id_cat FOREIGN KEY (id_cat) REFERENCES categories(id))"
+        self.cursor = connect.cursor
+        self.sql = "CREATE TABLE "+ T_PRODS +" (id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, id_cat SMALLINT, stores_name VARCHAR(100), nutri_score VARCHAR(2), description VARCHAR(255), link VARCHAR(255), CONSTRAINT fk_id_cat FOREIGN KEY (id_cat) REFERENCES categories(id))"
 
-
+    def create(self):
+        
+        self.cursor.execute(self.sql)
+     
+     
+    def insert(self):
+        pass
+    
 class Favorits():
      def __init__(self):
         pass
        
-
+     def create(self):
+        pass
+     
+     
+     def insert(self):
+        pass
+    
+    
 class Cat():
      def __init__(self):
-            self.creat = "CREATE TABLE categories (id SMALLINT AUTO_INCREMENT, cat_name VARCHAR(55) NOT NULL, PRIMARY KEY (id))"
-            self.insert = "INSERT INTO "+ T_CAT+"(cat_name) VALUES (%s)" 
+            self.cursor = connect.cursor
+            self.sql = "CREATE TABLE "+ T_CAT +" (id SMALLINT AUTO_INCREMENT, cat_name VARCHAR(55) NOT NULL, PRIMARY KEY (id))"
+            self.sql_insert = "INSERT INTO "+ T_CAT+"(cat_name) VALUES (%s)" 
             self.val=[('Fromages'),('Charcutries'),('Produits à tartiner'),('Boissons')]
-            self.for_key ="SELECT id FROM categories WHERE cat_name = 'Fromages'"
-             
+            self.for_key ="SELECT id FROM " + T_CAT + " WHERE cat_name = 'Boissons'"
+
+     def creat(self):
+        self.cursor.execute(self.sql)
+     
+     
+     def insert(self):
+        self.cursor.executemany(self.sql_insert, self.val)
+    
+     

@@ -1,3 +1,5 @@
+import urllib.parse
+
 """Here Is All constant indeed in the project"""
 
 """TABLES"""
@@ -7,11 +9,16 @@ T_PRODS = "products"
 T_FAV = "favorits"
 
 """API URLS"""
+url = "https://fr.openfoodfacts.org/cgi/search.pl"
+url_fix={
+    
+    'action':'process',
+    'tagtype_0':'categories',
+    'tag_contains_0':'contains',
+    'tag_0':'',
+    'page_size':'20',
+    'page':'1',
+    'json':'1',
+}
+print(url + urllib.parse.urlencode(url_fix))
 
-BOISSON_URL = "https://fr.openfoodfacts.org/magasin/super-u/categorie/boissons.json"
-FROMAGE_URL = "https://fr.openfoodfacts.org/categorie/fromages.json"
-PROD_TARTINER_URL = "https://fr.openfoodfacts.org/categorie/charcuteries.json"
-CHARCUTERIE_URL = "https://fr.openfoodfacts.org/categorie/produits-a-tartiner.json"
-
-"""API QUERYS"""
-INSERT= "INSERT INTO products VALUES (%s, %s, %s, %s, %s)"
