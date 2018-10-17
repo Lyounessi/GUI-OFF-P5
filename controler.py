@@ -5,7 +5,7 @@ from views import MyApp
 
 #Models Imports
 import models
-from models import *
+from models import Cat, Products, MyBase
 
 
 
@@ -64,9 +64,9 @@ class ModelMy():
         return url    
         
     def CreatMyClass(self):
-        self.cat.creat()
-        self.prods.create()
-        connect.db.commit()
+        #self.cat.creat()
+        #self.prods.create()
+        #connect.db.commit()
         pass
 
     
@@ -111,5 +111,3 @@ run_it.win.mainloop()
 in_modelmy = ModelMy()
 in_modelmy.CreatMyClass()
 in_modelmy.get_products_data()
-
-

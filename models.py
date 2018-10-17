@@ -5,8 +5,8 @@ import connect
 from connect import cursor
 import constant 
 from constant import *
-import controler
-from controler import ModelMy
+#import controler
+#from controler import ModelMy
 
 """Starting Classes"""
 
@@ -32,7 +32,7 @@ class Products():
         self.sql = "CREATE TABLE "+ T_PRODS +" (id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, id_cat SMALLINT, stores_name VARCHAR(100), nutri_score VARCHAR(2), description VARCHAR(255), link VARCHAR(255), CONSTRAINT fk_id_cat FOREIGN KEY (id_cat) REFERENCES categories(id))"
         self.get_id = "SELECT id FROM categories WHERE cat_name = 'Boissons' "
         
-        self.model = controler.ModelMy()
+        #self.model = controler.ModelMy()
         
     def create(self):
         
