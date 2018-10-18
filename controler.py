@@ -43,8 +43,8 @@ class ModelMy():
         self.prods = models.Products()
         
         #requests and api
-        self.req = requests.get(self.Creat_url('boissons'))
-        
+        self.req = requests.get(self.Creat_url('saucissons'))
+        self.data_prods = []
         
         
     def Creat_url(self, nom_categorie):
@@ -70,23 +70,26 @@ class ModelMy():
         pass
 
     
-    def get_products_data(self):
+    def Get_Insert_products(self):
         my_req = self.req.json()
         prods = my_req["products"]
-        data_prods = []
+        
+        #Makin the list global for using in all functions
+        global data_prods
+       
+        
         self.cursor.execute(self.prods.get_id)
         got = self.cursor.fetchall()
         print(got[0]["id"])
         
-        for elt in prods:
-            data_prods.append(elt["product_name"] )
-            data_prods.append(','.join(elt["stores_tags"]))
-            data_prods.append(got[0]["id"])
-            data_prods.append(' '.join(elt["ingredients_tags"]))
-            data_prods.append(' ,'.join(elt["nutrition_grades_tags"]))
-            data_prods.append(elt["url"])
-        print(data_prods)
-        
+        for i in range(20):
+            val = (prods[i]["product_name"], int(got[0]["id"]), ''.join(prods[i]["stores_tags"]), ''.join(prods[i]["nutrition_grades_tags"]), ''.join(prods[i]["ingredients_tags"]), prods[i]["url"])
+            self.cursor.execute(self.prods.insert_data, val)
+            
+        connect.db.commit()
+    
+    
+    
         
         
     
@@ -110,4 +113,4 @@ run_it.win.mainloop()
 
 in_modelmy = ModelMy()
 in_modelmy.CreatMyClass()
-in_modelmy.get_products_data()
+in_modelmy.Get_Insert_products()

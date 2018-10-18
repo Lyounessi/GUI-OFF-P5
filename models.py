@@ -29,10 +29,10 @@ class Products():
     
     def __init__(self):
         self.cursor = connect.cursor
-        self.sql = "CREATE TABLE "+ T_PRODS +" (id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, id_cat SMALLINT, stores_name VARCHAR(100), nutri_score VARCHAR(2), description VARCHAR(255), link VARCHAR(255), CONSTRAINT fk_id_cat FOREIGN KEY (id_cat) REFERENCES categories(id))"
-        self.get_id = "SELECT id FROM categories WHERE cat_name = 'Boissons' "
+        self.sql = "CREATE TABLE "+ T_PRODS +" (id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, id_cat SMALLINT, stores_name VARCHAR(100), nutri_score VARCHAR(120), description VARCHAR(3500), link VARCHAR(255), CONSTRAINT fk_id_cat FOREIGN KEY (id_cat) REFERENCES categories(id)) CHARSET= UTF8MB4 "
+        self.get_id = "SELECT id FROM categories WHERE cat_name = 'Charcutries' "
+        self.insert_data = "INSERT INTO products (product_name, id_cat, stores_name, nutri_score, description, link) VALUES (%s, %s, %s, %s, %s, %s)"
         
-        #self.model = controler.ModelMy()
         
     def create(self):
         
