@@ -38,17 +38,21 @@ from constant import *
 class ModelMy():
     
     def __init__(self):
+        #define the cursor of pymysql to manipulate datas
         self.cursor = connect.cursor
+        # creating objects that are imported from models
         self.cat = models.Cat()
         self.prods = models.Products()
+        self.app = views.MyApp()
         
-        #requests and api
+        #Geting the link of a specific categorie mentionned "creat_url method"
         self.req = requests.get(self.Creat_url('saucissons'))
-        self.data_prods = []
+        
         
         
     def Creat_url(self, nom_categorie):
-    
+        """This method  creat the link of the api that is filtred by the categories using python urllib"""
+        
         suffixe_url_element = {
         'action' : 'process',
         'tagtype_0' : 'categories',
@@ -71,17 +75,17 @@ class ModelMy():
 
     
     def Get_Insert_products(self):
+        #define the variabl that convert the api requests value as json format
         my_req = self.req.json()
+        #define the key products that have all the data indeed as content inside the json dict
         prods = my_req["products"]
         
-        #Makin the list global for using in all functions
-        global data_prods
-       
-        
+        #getting the id form categories table, situeted in the models
         self.cursor.execute(self.prods.get_id)
         got = self.cursor.fetchall()
         print(got[0]["id"])
         
+        #execute the query of insert from models and insert all the specific data in the table products
         for i in range(20):
             val = (prods[i]["product_name"], int(got[0]["id"]), ''.join(prods[i]["stores_tags"]), ''.join(prods[i]["nutrition_grades_tags"]), ''.join(prods[i]["ingredients_tags"]), prods[i]["url"])
             self.cursor.execute(self.prods.insert_data, val)
@@ -89,7 +93,7 @@ class ModelMy():
         connect.db.commit()
     
     
-    
+        
         
         
     
@@ -97,14 +101,31 @@ class ModelMy():
 
 
 class ViewMy():
-    pass
+    
+    def __init__(self):
+        #define the cursor of pymysql to manipulate datas
+        self.cursor = connect.cursor
+        #Geting all classes indeed
+        self.cat = models.Cat()
+        self.prods = models.Products()
+        self.app = views.MyApp()
+        #creat a tuple of categories value to add in the comobox of the view
+        self.cats_val =()
+    
+    def GetData_ToCats(self):
+        """This Method used to append data into the categorie's combobox in the view"""
+        self.cursor.execute(self.cat.get_cats)
+        my_cats = self.cursor.fetchall()
+        self.cats_val =(my_cats[0]["cat_name"], my_cats[1]["cat_name"], my_cats[2]["cat_name"], my_cats[3]["cat_name"])
+        print(self.cats_val)
 
 
 
 """View run and execution"""
 
-run_it = views.MyApp()
-run_it.win.mainloop()
+run_view = views.MyApp()
+run_view.win.mainloop()
+
 
 """Model run and execution"""
 
@@ -112,5 +133,9 @@ run_it.win.mainloop()
 #run_model.CreatMyDB()
 
 in_modelmy = ModelMy()
-in_modelmy.CreatMyClass()
-in_modelmy.Get_Insert_products()
+#in_modelmy.CreatMyClass()
+#in_modelmy.Get_Insert_products()
+
+"""View class runs"""
+in_viewmy = ViewMy()
+in_viewmy.GetData_ToCats()

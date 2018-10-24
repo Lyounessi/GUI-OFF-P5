@@ -1,5 +1,3 @@
-import urllib.parse
-
 """Here Is All constant indeed in the project"""
 
 """TABLES"""
