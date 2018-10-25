@@ -25,8 +25,9 @@ import connect
 
 #Constants import
 import constant
+# urllib python
 import urllib.parse
-from constant import *
+
 
 
 """Starting Classes"""
@@ -43,7 +44,7 @@ class ModelMy():
         # creating objects that are imported from models
         self.cat = models.Cat()
         self.prods = models.Products()
-        self.app = views.MyApp()
+        
         
         #Geting the link of a specific categorie mentionned "creat_url method"
         self.req = requests.get(self.Creat_url('saucissons'))
@@ -109,22 +110,22 @@ class ViewMy():
         self.cat = models.Cat()
         self.prods = models.Products()
         self.app = views.MyApp()
+        #self.app.win.mainloop()
         #creat a tuple of categories value to add in the comobox of the view
         self.cats_val =()
+        
     
     def GetData_ToCats(self):
         """This Method used to append data into the categorie's combobox in the view"""
-        self.cursor.execute(self.cat.get_cats)
-        my_cats = self.cursor.fetchall()
-        self.cats_val =(my_cats[0]["cat_name"], my_cats[1]["cat_name"], my_cats[2]["cat_name"], my_cats[3]["cat_name"])
-        print(self.cats_val)
+        self.cursor.execute(self.cat.get_cats) # execute the query of selecting all datas from the categories
+        my_cats = self.cursor.fetchall() # geting the value of the query
+        self.cats_val =(my_cats[0]["cat_name"], my_cats[1]["cat_name"], my_cats[2]["cat_name"], my_cats[3]["cat_name"]) # making a tuple having the cat_name's datas
+        
+        for i in self.cats_val:
+            print(i)
 
-
-
-"""View run and execution"""
-
-run_view = views.MyApp()
-run_view.win.mainloop()
+    def RuMe(self):
+        self.app.win.mainloop()
 
 
 """Model run and execution"""
@@ -132,10 +133,11 @@ run_view.win.mainloop()
 #run_model = models.MyBase()
 #run_model.CreatMyDB()
 
-in_modelmy = ModelMy()
+#in_modelmy = ModelMy()
 #in_modelmy.CreatMyClass()
 #in_modelmy.Get_Insert_products()
 
 """View class runs"""
 in_viewmy = ViewMy()
 in_viewmy.GetData_ToCats()
+in_viewmy.RuMe()

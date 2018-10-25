@@ -25,9 +25,13 @@ class MyApp():
         # Add a title
         self.win.title("OpenFoodFacts")
         self.createWidgets()
+        #self.insert_combox(values)
         self.win.resizable(0,0)
-    
-    
+        #widgets
+        #self.combo_cat = ""
+        #self.monty =""
+        
+        
     def createWidgets(self):
         # Tab Control
         tabControl = ttk.Notebook(self.win) 
@@ -41,42 +45,42 @@ class MyApp():
         tabControl.pack(expand=1, fill="both") # Pack make visible
         
          # ----------------------Tabe's1 widgets---------------------------
-        monty = ttk.LabelFrame(tab1, text=' Liste des Produits ')
-        monty.grid(column=0, row=1, padx=8, pady=4)
-        ttk.Label(monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
+        self.monty = ttk.LabelFrame(tab1, text=' Liste des Produits ')
+        self.monty.grid(column=0, row=1, padx=8, pady=4)
+        ttk.Label(self.monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
         
         # widgets of the categories
-        combo_cat = ttk.Combobox(monty, width=14)
-        combo_cat.grid(column=1, row=0) 
-        ttk.Label(monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
+        self.combo_cat = ttk.Combobox(self.monty,  width=14)
+        self.combo_cat.grid(column=1, row=0) 
+        ttk.Label(self.monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
         
         # Product's widgets
-        combo_cat = ttk.Combobox(monty, width=14)
-        combo_cat.grid(column=4, row=0) 
-        ttk.Label(monty, text="Choisir Produit :").grid(column=3, row=0,sticky='W')
+        self.combo_cat = ttk.Combobox(self.monty, width=14)
+        self.combo_cat.grid(column=4, row=0) 
+        ttk.Label(self.monty, text="Choisir Produit :").grid(column=3, row=0,sticky='W')
         
         #Labels Groups
         #name
-        ttk.Label(monty, text="Nom :").grid(column=0, row=1,sticky='W')
-        ttk.Label(monty, text="get name").grid(column=1, row=1,sticky='W')
+        ttk.Label(self.monty, text="Nom :").grid(column=0, row=1,sticky='W')
+        ttk.Label(self.monty, text="get name").grid(column=1, row=1,sticky='W')
         
         #Link
-        ttk.Label(monty, text="Lien :").grid(column=0, row=2,sticky='W')
-        ttk.Label(monty, text="get link").grid(column=1, row=2,sticky='W')
+        ttk.Label(self.monty, text="Lien :").grid(column=0, row=2,sticky='W')
+        ttk.Label(self.monty, text="get link").grid(column=1, row=2,sticky='W')
         
         #nutrition_score
-        ttk.Label(monty, text="Nutrition_score :").grid(column=2, row=1,sticky='W')
-        ttk.Label(monty, text="get NT").grid(column=3, row=1,sticky='E')
+        ttk.Label(self.monty, text="Nutrition_score :").grid(column=2, row=1,sticky='W')
+        ttk.Label(self.monty, text="get NT").grid(column=3, row=1,sticky='E')
         
         #store_name
-        ttk.Label(monty, text="Magasin :").grid(column=2, row=2,sticky='W')
-        ttk.Label(monty, text="get store").grid(column=3, row=2,sticky='E')
+        ttk.Label(self.monty, text="Magasin :").grid(column=2, row=2,sticky='W')
+        ttk.Label(self.monty, text="get store").grid(column=3, row=2,sticky='E')
         
         #Description of the product(ingredients) by scrolled text
-        ttk.Label(monty, text="Description_ingredients :").grid(column=1, row=3,sticky='W')
+        ttk.Label(self.monty, text="Description_ingredients :").grid(column=1, row=3,sticky='W')
         scrol_w = 30
         scrol_h = 3
-        src = scrolledtext.ScrolledText(monty, width = scrol_w, height = scrol_h, wrap = tk.WORD)
+        src = scrolledtext.ScrolledText(self.monty, width = scrol_w, height = scrol_h, wrap = tk.WORD)
         src.grid(column = 2, row = 3)
         
         """
@@ -106,3 +110,4 @@ class MyApp():
         def ShowProducts(self):
             pass
         """    
+      
