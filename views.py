@@ -24,6 +24,7 @@ class MyApp():
         
         # Add a title
         self.win.title("OpenFoodFacts")
+        #creat widgets
         self.createWidgets()
         #self.insert_combox(values)
         self.win.resizable(0,0)
@@ -33,7 +34,7 @@ class MyApp():
         
         
     def createWidgets(self):
-        # Tab Control
+        # Tabs's Control
         tabControl = ttk.Notebook(self.win) 
 
         tab1 = ttk.Frame(tabControl) 
@@ -50,13 +51,13 @@ class MyApp():
         ttk.Label(self.monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
         
         # widgets of the categories
-        self.combo_cat = ttk.Combobox(self.monty,  width=14)
+        self.combo_cat = ttk.Combobox(self.monty, width=14)
         self.combo_cat.grid(column=1, row=0) 
         ttk.Label(self.monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
         
         # Product's widgets
-        self.combo_cat = ttk.Combobox(self.monty, width=14)
-        self.combo_cat.grid(column=4, row=0) 
+        self.combo_prods = ttk.Combobox(self.monty, width=14)
+        self.combo_prods.grid(column=4, row=0) 
         ttk.Label(self.monty, text="Choisir Produit :").grid(column=3, row=0,sticky='W')
         
         #Labels Groups
@@ -107,7 +108,8 @@ class MyApp():
         ttk.Label(monty1, text="get store").grid(column=5, row=2,sticky='E')
         
         
-        def ShowProducts(self):
-            pass
+        
         """    
-      
+   
+    
+        

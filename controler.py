@@ -120,9 +120,8 @@ class ViewMy():
         self.cursor.execute(self.cat.get_cats) # execute the query of selecting all datas from the categories
         my_cats = self.cursor.fetchall() # geting the value of the query
         self.cats_val =(my_cats[0]["cat_name"], my_cats[1]["cat_name"], my_cats[2]["cat_name"], my_cats[3]["cat_name"]) # making a tuple having the cat_name's datas
-        
-        for i in self.cats_val:
-            print(i)
+        print(type(self.app.combo_cat))
+        self.app.combo_cat['values'] = self.cats_val
 
     def RuMe(self):
         self.app.win.mainloop()
