@@ -6,7 +6,7 @@ from tkinter import messagebox as mBox
 import connect
 import models
 from models import Products, Favorits, Cat
-
+import pymysql.cursors
 
 """Class content all widgets indeed"""
 #The new OOP code looks like this:
@@ -21,19 +21,37 @@ class MyApp():
         self.cat = models.Cat()
         self.prods = models.Products()
         self.fav = models.Favorits
-        
+        self.cursor = connect.cursor
         # Add a title
         self.win.title("OpenFoodFacts")
         #creat widgets
         self.createWidgets()
         #self.insert_combox(values)
         self.win.resizable(0,0)
-        #widgets
-        #self.combo_cat = ""
-        #self.monty =""
+        #tuple of products combobox
+        self.prods_val = ()
         
+    
+    
+    def get_products(self):
         
+        #----------------------- Geting the products--------------------------
+        name = self.combo_cat.get()# Get datas from the categories  combobox
+        self.get_id2 = self.cat.get_to_comboprods + "cat_name ='{}'".format(str(name))# Qery to get the id of the categorie name selected
+        self.cursor.execute(self.get_id2)# execute the qery
+        got = self.cursor.fetchall()# get the value of the qery with fetch()
+        self.GUI_products = self.prods.combo_prods_get + "id_cat = {}".format(got[0]["id"]) # qery to get products linked to the specific categorie
+        self.cursor.execute(self.GUI_products)
+        self.geting = self.cursor.fetchall()# fetch the qery and get the products
+         
+        print(self.geting)
+        
+        #--------------- SHow products INfos ------------------------------
+            
+            
     def createWidgets(self):
+        """This Method where widgets are created"""
+        
         # Tabs's Control
         tabControl = ttk.Notebook(self.win) 
 
@@ -56,7 +74,7 @@ class MyApp():
         ttk.Label(self.monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
         
         # Product's widgets
-        self.combo_prods = ttk.Combobox(self.monty, width=14)
+        self.combo_prods = ttk.Spinbox(self.monty, width=30)
         self.combo_prods.grid(column=4, row=0) 
         ttk.Label(self.monty, text="Choisir Produit :").grid(column=3, row=0,sticky='W')
         
@@ -84,6 +102,16 @@ class MyApp():
         src = scrolledtext.ScrolledText(self.monty, width = scrol_w, height = scrol_h, wrap = tk.WORD)
         src.grid(column = 2, row = 3)
         
+        #creating buttons
+        # Geting products button
+        self.get_prods = ttk.Button(self.monty, text = "obtenir_produits", command = self.get_products)
+        self.get_prods.grid(column = 1, row = 4)
+        #exit button
+        self.exit = ttk.Button(self.monty, text = "Quitter", command = self.win.destroy)
+        self.exit.grid(column = 2, row = 4)
+        # sauvgarde button
+        self.exit = ttk.Button(self.monty, text = "Enregistrer", command = self.win.destroy)
+        self.exit.grid(column = 3, row = 4)
         """
         #The second box (Lable_Frames) of the best products comparing
         
@@ -106,10 +134,7 @@ class MyApp():
         #store_name
         ttk.Label(monty1, text="Magasin :").grid(column=4, row=2,sticky='E')
         ttk.Label(monty1, text="get store").grid(column=5, row=2,sticky='E')
-        
-        
-        
         """    
-   
     
+        #---------------------------------------tab's 2 widgets---------------------------
         
