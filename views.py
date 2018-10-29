@@ -1,8 +1,8 @@
 """All Imports in"""
 
 import tkinter as tk 
-from tkinter import ttk, scrolledtext 
-from tkinter import messagebox as mBox
+from tkinter import ttk, scrolledtext, Scrollbar, END
+from tkinter import Listbox as lb
 import connect
 import models
 from models import Products, Favorits, Cat
@@ -43,8 +43,8 @@ class MyApp():
         self.GUI_products = self.prods.combo_prods_get + "id_cat = {}".format(got[0]["id"]) # qery to get products linked to the specific categorie
         self.cursor.execute(self.GUI_products)
         self.geting = self.cursor.fetchall()# fetch the qery and get the products
-         
-        print(self.geting)
+        for prods in self.geting:
+            self.list_prods.insert(END, prods["product_name"])
         
         #--------------- SHow products INfos ------------------------------
             
@@ -74,8 +74,9 @@ class MyApp():
         ttk.Label(self.monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
         
         # Product's widgets
-        self.combo_prods = ttk.Spinbox(self.monty, width=30)
-        self.combo_prods.grid(column=4, row=0) 
+        scroll = Scrollbar(self.monty, orient="vertical")
+        self.list_prods = lb(self.monty, xscrollcommand = scroll)
+        self.list_prods.grid(column=4, row=0) 
         ttk.Label(self.monty, text="Choisir Produit :").grid(column=3, row=0,sticky='W')
         
         #Labels Groups
