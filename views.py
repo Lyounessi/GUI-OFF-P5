@@ -43,9 +43,10 @@ class MyApp():
         self.GUI_products = self.prods.combo_prods_get + "id_cat = {}".format(got[0]["id"]) # qery to get products linked to the specific categorie
         self.cursor.execute(self.GUI_products)
         self.geting = self.cursor.fetchall()# fetch the qery and get the products
+        self.list_prods.delete(0, tk.END)
         for prods in self.geting:
-            self.list_prods.insert(END, prods["product_name"])
-        
+            self.list_prods.insert(0, prods["product_name"])
+            
         #--------------- SHow products INfos ------------------------------
             
             
@@ -75,8 +76,8 @@ class MyApp():
         
         # Product's widgets
         scroll = Scrollbar(self.monty, orient="vertical")
-        self.list_prods = lb(self.monty, xscrollcommand = scroll)
-        self.list_prods.grid(column=4, row=0) 
+        self.list_prods = lb(self.monty, xscrollcommand = scroll, width= 40, height = 15)
+        self.list_prods.grid(column=4, row=0 ) 
         ttk.Label(self.monty, text="Choisir Produit :").grid(column=3, row=0,sticky='W')
         
         #Labels Groups
@@ -109,6 +110,9 @@ class MyApp():
         self.get_prods.grid(column = 1, row = 4)
         #exit button
         self.exit = ttk.Button(self.monty, text = "Quitter", command = self.win.destroy)
+        self.exit.grid(column = 4, row = 4)
+        #informations about products button
+        self.exit = ttk.Button(self.monty, text = "infos_produit", command = self.win.destroy)
         self.exit.grid(column = 2, row = 4)
         # sauvgarde button
         self.exit = ttk.Button(self.monty, text = "Enregistrer", command = self.win.destroy)

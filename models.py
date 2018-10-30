@@ -5,8 +5,7 @@ import connect
 from connect import cursor
 import constant 
 from constant import *
-#import controler
-#from controler import ModelMy
+
 
 """Starting Classes"""
 
