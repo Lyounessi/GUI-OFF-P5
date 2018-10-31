@@ -44,6 +44,7 @@ class ModelMy():
         # creating objects that are imported from models
         self.cat = models.Cat()
         self.prods = models.Products()
+        self.my_base = models.MyBase()
         
         
         #Geting the link of a specific categorie mentionned "creat_url method"
@@ -74,6 +75,9 @@ class ModelMy():
         #connect.db.commit()
         pass
 
+    def clean_tables(self):
+        #self.my_base.Cleanclass("products")
+        pass
     
     def Get_Insert_products(self):
         #define the variabl that convert the api requests value as json format
@@ -85,10 +89,20 @@ class ModelMy():
         self.cursor.execute(self.prods.get_id)
         got = self.cursor.fetchall()
         print(got[0]["id"])
-        
-        #execute the query of insert from models and insert all the specific data in the table products
+        api_product = []
+        #loop to eskape the double products valus in the products table
         for i in range(20):
-            val = (prods[i]["product_name"], int(got[0]["id"]), ''.join(prods[i]["stores_tags"]), ''.join(prods[i]["nutrition_grades_tags"]), ''.join(prods[i]["ingredients_tags"]), prods[i]["url"])
+            found = False
+            for elt in api_product:
+                if prods[i]["product_name"] == elt["product_name"]:
+                    found = True
+            if found == 0:
+                api_product.append(prods[i])
+        print(len(api_product))
+        print(api_product[0]["product_name"], api_product[0]["stores_tags"])
+        #execute the query of insert from models and insert all the specific data in the table products
+        for i in range(len(api_product)):
+            val = (api_product[i]["product_name"], int(got[0]["id"]), ''.join(api_product[i]["stores_tags"]), ''.join(api_product[i]["nutrition_grades_tags"]), ''.join(api_product[i]["ingredients_tags"]), api_product[i]["url"])
             self.cursor.execute(self.prods.insert_data, val)
             
         connect.db.commit()
@@ -135,9 +149,10 @@ class ViewMy():
 #run_model = models.MyBase()
 #run_model.CreatMyDB()
 
-#in_modelmy = ModelMy()
+in_modelmy = ModelMy()
 #in_modelmy.CreatMyClass()
 #in_modelmy.Get_Insert_products()
+#in_modelmy.clean_tables()
 
 """View class runs"""
 in_viewmy = ViewMy()

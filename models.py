@@ -21,6 +21,10 @@ class MyBase():
         
     def CreatMyDB(self):
         self.cursor.execute(self.db)
+        
+    def Cleanclass(self, nom_table):
+        self.drop_class = "DROP TABLE " + nom_table
+        self.cursor.execute(self.drop_class)
 
 """Models Classes"""
 
@@ -29,23 +33,25 @@ class Products():
     """This class present the products table """
     def __init__(self):
         self.cursor = connect.cursor
-        self.sql = "CREATE TABLE "+ T_PRODS +" (id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, id_cat SMALLINT, stores_name VARCHAR(100), nutri_score VARCHAR(120), description VARCHAR(3500), link VARCHAR(255), CONSTRAINT fk_id_cat FOREIGN KEY (id_cat) REFERENCES categories(id)) CHARSET= UTF8MB4 " # creating the table products
-        self.get_id = "SELECT id FROM categories WHERE cat_name = 'Charcutries' " # geting the id of every categories names in the table categories
-        self.insert_data = "INSERT INTO products (product_name, id_cat, stores_name, nutri_score, description, link) VALUES (%s, %s, %s, %s, %s, %s)" # inserting datas from the OFF's api
-        self.combo_prods_get = "SELECT product_name FROM products WHERE "
+        # creating the table products
+        self.sql = "CREATE TABLE "+ T_PRODS +" (id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, id_cat SMALLINT, stores_name VARCHAR(100), nutri_score VARCHAR(120), description VARCHAR(3500), link VARCHAR(255), CONSTRAINT fk_id_cat FOREIGN KEY (id_cat) REFERENCES categories(id)) CHARSET= UTF8MB4 " 
+        # geting the id of every categories names in the table categories
+        self.get_id = "SELECT id FROM categories WHERE cat_name = 'charcutries' " 
+        # inserting datas from the OFF's api
+        self.insert_data = "INSERT INTO products (product_name, id_cat, stores_name, nutri_score, description, link) VALUES (%s, %s, %s, %s, %s, %s)" 
+        #Multiple Selection linked to the view
+        self.list_prods_name = "SELECT product_name FROM products WHERE "
+        self.list_prods_link = "SELECT link FROM products WHERE "
+        self.list_prods_nt = "SELECT nutri_score FROM products WHERE "
+        self.list_prods_mag = "SELECT stores_name FROM products WHERE "
+        self.list_prods_desc = "SELECT description FROM products WHERE "
+        
         
         
     def create(self):
-        
+        """Method to creat table products """
         self.cursor.execute(self.sql)
-    
-    def show_data(self, info_to_show):
-        self.show = "SELECT "+info_to_show+" FROM products"
-        self.cursor.execut(self.show)
-        self.cursor.fetchone(self.show)
      
-    
-    
         
         
     
@@ -75,10 +81,12 @@ class Cat():
         self.get_cats = "SELECT cat_name FROM categories"    
         self.get_to_comboprods = "SELECT id FROM categories WHERE "
     def creat(self):
+        """Method to creat table """
         self.cursor.execute(self.sql)
      
      
     def insert(self):
+        """Method to insert values in the table categories"""
         self.cursor.executemany(self.sql_insert, self.val)
     
      

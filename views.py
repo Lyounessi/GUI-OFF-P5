@@ -1,7 +1,7 @@
 """All Imports in"""
 
 import tkinter as tk 
-from tkinter import ttk, scrolledtext, Scrollbar, END
+from tkinter import ttk, scrolledtext, Scrollbar, END, ACTIVE
 from tkinter import Listbox as lb
 import connect
 import models
@@ -17,7 +17,7 @@ class MyApp():
         # Create instances
         self.win = tk.Tk()
         self.win.iconbitmap(r'C:\Users\boukr\Desktop\here\GUI-OFF-P5\logo.ico')
-        """Attributs of the models's Classes"""
+        #Attributs of the models's Classes
         self.cat = models.Cat()
         self.prods = models.Products()
         self.fav = models.Favorits
@@ -30,25 +30,42 @@ class MyApp():
         self.win.resizable(0,0)
         #tuple of products combobox
         self.prods_val = ()
+        #define the attribut text for lables
+        
         
     
     
     def get_products(self):
+        """Method Geting the products"""
         
-        #----------------------- Geting the products--------------------------
         name = self.combo_cat.get()# Get datas from the categories  combobox
         self.get_id2 = self.cat.get_to_comboprods + "cat_name ='{}'".format(str(name))# Qery to get the id of the categorie name selected
         self.cursor.execute(self.get_id2)# execute the qery
         got = self.cursor.fetchall()# get the value of the qery with fetch()
-        self.GUI_products = self.prods.combo_prods_get + "id_cat = {}".format(got[0]["id"]) # qery to get products linked to the specific categorie
+        self.GUI_products = self.prods.list_prods_name + "id_cat = {}".format(got[0]["id"]) # qery to get products linked to the specific categorie's id
         self.cursor.execute(self.GUI_products)
         self.geting = self.cursor.fetchall()# fetch the qery and get the products
         self.list_prods.delete(0, tk.END)
         for prods in self.geting:
             self.list_prods.insert(0, prods["product_name"])
-            
-        #--------------- SHow products INfos ------------------------------
-            
+    
+    def getprodinfos(self):
+        """Method to show products Infos"""
+        
+        name = self.list_prods.get(ACTIVE)
+        self.name_lab["text"] = name #get the name of product from the listbox directly
+        link = self.prods.list_prods_link + "product_name = '{}'".format(str(name))
+        nutri_score = self.prods.list_prods_nt + "product_name = '{}'".format(str(name))
+        mags = self.prods.list_prods_mag + "product_name = '{}'".format(str(name))
+        desc = self.prods.list_prods_desc + "product_name = '{}'".format(str(name))
+        exe_link = self.cursor.execute(link)
+        print(self.cursor.fetchone())
+        exe_ns = self.cursor.execute(nutri_score)
+        exe_mags = self.cursor.execute(mags)
+        
+                                
+        
+        
             
     def createWidgets(self):
         """This Method where widgets are created"""
@@ -81,41 +98,43 @@ class MyApp():
         ttk.Label(self.monty, text="Choisir Produit :").grid(column=3, row=0,sticky='W')
         
         #Labels Groups
+        font_size = 12
         #name
-        ttk.Label(self.monty, text="Nom :").grid(column=0, row=1,sticky='W')
-        ttk.Label(self.monty, text="get name").grid(column=1, row=1,sticky='W')
+        self.name_lab = ttk.Label(self.monty, text= "NOM PRODUIT", font=("Helvetica", font_size))
+        self.name_lab.grid(column=0, row=1)
         
         #Link
-        ttk.Label(self.monty, text="Lien :").grid(column=0, row=2,sticky='W')
-        ttk.Label(self.monty, text="get link").grid(column=1, row=2,sticky='W')
+        self.link_lab = ttk.Label(self.monty, text="LIEN", font=("Helvetica", font_size))
+        self.link_lab.grid(column=0, row=2)
         
         #nutrition_score
-        ttk.Label(self.monty, text="Nutrition_score :").grid(column=2, row=1,sticky='W')
-        ttk.Label(self.monty, text="get NT").grid(column=3, row=1,sticky='E')
+        self.nt_lab = ttk.Label(self.monty, text="NUTRI SCORE", font=("Helvetica", font_size))
+        self.nt_lab.grid(column=2, row=1)
         
         #store_name
-        ttk.Label(self.monty, text="Magasin :").grid(column=2, row=2,sticky='W')
-        ttk.Label(self.monty, text="get store").grid(column=3, row=2,sticky='E')
+        self.store_lab = ttk.Label(self.monty, text="MAGASIN", font=("Helvetica", font_size))
+        self.store_lab.grid(column=2, row=2)
         
         #Description of the product(ingredients) by scrolled text
         ttk.Label(self.monty, text="Description_ingredients :").grid(column=1, row=3,sticky='W')
-        scrol_w = 30
+        scrol_w = 50
         scrol_h = 3
         src = scrolledtext.ScrolledText(self.monty, width = scrol_w, height = scrol_h, wrap = tk.WORD)
         src.grid(column = 2, row = 3)
         
         #creating buttons
+        b_width = 30
         # Geting products button
-        self.get_prods = ttk.Button(self.monty, text = "obtenir_produits", command = self.get_products)
+        self.get_prods = ttk.Button(self.monty, text = "obtenir_produits", width = b_width, command = self.get_products)
         self.get_prods.grid(column = 1, row = 4)
         #exit button
-        self.exit = ttk.Button(self.monty, text = "Quitter", command = self.win.destroy)
+        self.exit = ttk.Button(self.monty, text = "Quitter", width = b_width, command = self.win.destroy)
         self.exit.grid(column = 4, row = 4)
         #informations about products button
-        self.exit = ttk.Button(self.monty, text = "infos_produit", command = self.win.destroy)
+        self.exit = ttk.Button(self.monty, text = "infos_produit", width = b_width, command = self.getprodinfos)
         self.exit.grid(column = 2, row = 4)
         # sauvgarde button
-        self.exit = ttk.Button(self.monty, text = "Enregistrer", command = self.win.destroy)
+        self.exit = ttk.Button(self.monty, text = "Enregistrer", width = b_width, command = self.win.destroy)
         self.exit.grid(column = 3, row = 4)
         """
         #The second box (Lable_Frames) of the best products comparing
