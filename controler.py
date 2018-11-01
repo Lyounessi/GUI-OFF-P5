@@ -134,7 +134,7 @@ class ViewMy():
         self.cursor.execute(self.cat.get_cats) # execute the query of selecting all datas from the categories
         my_cats = self.cursor.fetchall() # geting the value of the query
         self.cats_val =(my_cats[0]["cat_name"], my_cats[1]["cat_name"], my_cats[2]["cat_name"], my_cats[3]["cat_name"]) # making a tuple having the cat_name's datas
-        print(type(self.app.combo_cat))#test if the attriut in the view is called in the controler
+        #print(type(self.app.combo_cat))#test if the attribut in the view is called in the controler
         self.app.combo_cat['values'] = self.cats_val # insert the values of the tuple self.cats_val in the combobox of categories
         print(self.app.combo_cat['values']) # test of values if they are in the combobox
     

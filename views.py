@@ -7,7 +7,8 @@ import connect
 import models
 from models import Products, Favorits, Cat
 import pymysql.cursors
-
+import webbrowser
+ 
 """Class content all widgets indeed"""
 #The new OOP code looks like this:
 class MyApp():
@@ -54,15 +55,20 @@ class MyApp():
         
         name = self.list_prods.get(ACTIVE)
         self.name_lab["text"] = name #get the name of product from the listbox directly
+        # preparing querys
         link = self.prods.list_prods_link + "product_name = '{}'".format(str(name))
         nutri_score = self.prods.list_prods_nt + "product_name = '{}'".format(str(name))
         mags = self.prods.list_prods_mag + "product_name = '{}'".format(str(name))
         desc = self.prods.list_prods_desc + "product_name = '{}'".format(str(name))
+        #execute querys
         exe_link = self.cursor.execute(link)
-        print(self.cursor.fetchone())
+        link_get = self.cursor.fetchone()
         exe_ns = self.cursor.execute(nutri_score)
+        nutri_get = self.cursor.fetchone()
         exe_mags = self.cursor.execute(mags)
-        
+        mag_get = self.cursor.fetchone()
+        #get infos
+        self.link_lab["text"] = link_get["link"]
                                 
         
         
@@ -75,7 +81,7 @@ class MyApp():
 
         tab1 = ttk.Frame(tabControl) 
         tabControl.add(tab1, text='Produits') 
-       
+        tabControl.pack(expand=1, fill="both")
         # Create second tab
         tab2 = ttk.Frame(tabControl) 
         tabControl.add(tab2, text='Favorits') # Add second tab
@@ -83,59 +89,59 @@ class MyApp():
         
          # ----------------------Tabe's1 widgets---------------------------
         self.monty = ttk.LabelFrame(tab1, text=' Liste des Produits ')
-        self.monty.grid(column=0, row=1, padx=8, pady=4)
-        ttk.Label(self.monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
+        self.monty.pack()
+        ttk.Label(self.monty, text="Choisir catégorie :").pack()
         
         # widgets of the categories
         self.combo_cat = ttk.Combobox(self.monty, width=14)
-        self.combo_cat.grid(column=1, row=0) 
-        ttk.Label(self.monty, text="Choisir catégorie :").grid(column=0, row=0,sticky='W')
+        self.combo_cat.pack()
+        ttk.Label(self.monty, text="Choisir produit :").pack()
         
         # Product's widgets
         scroll = Scrollbar(self.monty, orient="vertical")
         self.list_prods = lb(self.monty, xscrollcommand = scroll, width= 40, height = 15)
-        self.list_prods.grid(column=4, row=0 ) 
-        ttk.Label(self.monty, text="Choisir Produit :").grid(column=3, row=0,sticky='W')
+        self.list_prods.pack()
+        
         
         #Labels Groups
         font_size = 12
         #name
         self.name_lab = ttk.Label(self.monty, text= "NOM PRODUIT", font=("Helvetica", font_size))
-        self.name_lab.grid(column=0, row=1)
+        self.name_lab.pack()
         
         #Link
-        self.link_lab = ttk.Label(self.monty, text="LIEN", font=("Helvetica", font_size))
-        self.link_lab.grid(column=0, row=2)
+        self.link_lab = ttk.Label(self.monty, text=r"LIEN", font=("Helvetica", font_size))
+        self.link_lab.pack()
         
         #nutrition_score
         self.nt_lab = ttk.Label(self.monty, text="NUTRI SCORE", font=("Helvetica", font_size))
-        self.nt_lab.grid(column=2, row=1)
+        self.nt_lab.pack()
         
         #store_name
         self.store_lab = ttk.Label(self.monty, text="MAGASIN", font=("Helvetica", font_size))
-        self.store_lab.grid(column=2, row=2)
+        self.store_lab.pack()
         
         #Description of the product(ingredients) by scrolled text
-        ttk.Label(self.monty, text="Description_ingredients :").grid(column=1, row=3,sticky='W')
+        ttk.Label(self.monty, text="Description_ingredients :").pack()
         scrol_w = 50
         scrol_h = 3
         src = scrolledtext.ScrolledText(self.monty, width = scrol_w, height = scrol_h, wrap = tk.WORD)
-        src.grid(column = 2, row = 3)
+        src.pack()
         
         #creating buttons
         b_width = 30
         # Geting products button
         self.get_prods = ttk.Button(self.monty, text = "obtenir_produits", width = b_width, command = self.get_products)
-        self.get_prods.grid(column = 1, row = 4)
+        self.get_prods.pack()
         #exit button
         self.exit = ttk.Button(self.monty, text = "Quitter", width = b_width, command = self.win.destroy)
-        self.exit.grid(column = 4, row = 4)
+        self.exit.pack()
         #informations about products button
         self.exit = ttk.Button(self.monty, text = "infos_produit", width = b_width, command = self.getprodinfos)
-        self.exit.grid(column = 2, row = 4)
+        self.exit.pack()
         # sauvgarde button
         self.exit = ttk.Button(self.monty, text = "Enregistrer", width = b_width, command = self.win.destroy)
-        self.exit.grid(column = 3, row = 4)
+        self.exit.pack()
         """
         #The second box (Lable_Frames) of the best products comparing
         
