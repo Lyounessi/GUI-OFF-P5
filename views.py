@@ -17,6 +17,8 @@ class MyApp():
 
         # Create instances
         self.win = tk.Tk()
+        self.win.geometry( "820x720" )
+        self.win.resizable(0,0)
         self.win.iconbitmap(r'C:\Users\boukr\Desktop\here\GUI-OFF-P5\logo.ico')
         #Attributs of the models's Classes
         self.cat = models.Cat()
@@ -27,8 +29,6 @@ class MyApp():
         self.win.title("OpenFoodFacts")
         #creat widgets
         self.createWidgets()
-        #self.insert_combox(values)
-        self.win.resizable(0,0)
         #tuple of products combobox
         self.prods_val = ()
         #define the attribut text for lables
@@ -67,9 +67,30 @@ class MyApp():
         nutri_get = self.cursor.fetchone()
         exe_mags = self.cursor.execute(mags)
         mag_get = self.cursor.fetchone()
+        exe_desc = self.cursor.execute(desc)
+        desc_get = self.cursor.fetchone()
+        
         #get infos
-        self.link_lab["text"] = link_get["link"]
-                                
+        self.link_lab["text"] = "Lien : "+link_get["link"]
+        
+        if self.store_lab["text"] == "NONE":
+            self.store_lab["text"] = "INCONUE"
+        else:
+            self.store_lab["text"] = "Magasin : +"+mag_get["stores_name"]
+        self.nt_lab["text"] = "Nutri_score: "+nutri_get["nutri_score"]
+        self.src.insert(END, desc_get["description"])   
+    
+    def best_prod(self):
+        #best product infos
+        name_cat = self.combo_cat.get()# Get datas from the categories  combobox
+        get_id = self.cat.get_to_comboprods + "cat_name ='{}'".format(str(name_cat))# Qery to get the id of the categorie name selected
+        self.cursor.execute(get_id)# execute the qery
+        got = self.cursor.fetchall()# get the value of the qery with fetch()
+        got_id = got[0]["id"]
+        #get the best product based on the categorie
+          
+        self.prods.SelectBestProd(str(got_id)) 
+            
         
         
             
@@ -81,37 +102,38 @@ class MyApp():
 
         tab1 = ttk.Frame(tabControl) 
         tabControl.add(tab1, text='Produits') 
-        tabControl.pack(expand=1, fill="both")
+        tabControl.pack(expand=2, fill="both")
         # Create second tab
         tab2 = ttk.Frame(tabControl) 
         tabControl.add(tab2, text='Favorits') # Add second tab
-        tabControl.pack(expand=1, fill="both") # Pack make visible
+        tabControl.pack(expand=2, fill="both") # Pack make visible
         
          # ----------------------Tabe's1 widgets---------------------------
         self.monty = ttk.LabelFrame(tab1, text=' Liste des Produits ')
         self.monty.pack()
-        ttk.Label(self.monty, text="Choisir catégorie :").pack()
-        
+         #static label's font size
+        stat_labels = 13
+        ttk.Label(self.monty, text="Choisir catégorie :", font=("Helvetica", stat_labels)).pack()
         # widgets of the categories
-        self.combo_cat = ttk.Combobox(self.monty, width=14)
+        self.combo_cat = ttk.Combobox(self.monty, width=18)
         self.combo_cat.pack()
-        ttk.Label(self.monty, text="Choisir produit :").pack()
+        ttk.Label(self.monty, text="Choisir produit :", font=("Helvetica", stat_labels)).pack()
         
         # Product's widgets
         scroll = Scrollbar(self.monty, orient="vertical")
         self.list_prods = lb(self.monty, xscrollcommand = scroll, width= 40, height = 15)
         self.list_prods.pack()
         
-        
         #Labels Groups
-        font_size = 12
+        font_size = 11
         #name
         self.name_lab = ttk.Label(self.monty, text= "NOM PRODUIT", font=("Helvetica", font_size))
         self.name_lab.pack()
         
         #Link
-        self.link_lab = ttk.Label(self.monty, text=r"LIEN", font=("Helvetica", font_size))
+        self.link_lab = ttk.Label(self.monty, text=r"LIEN", font=("Helvetica", font_size), cursor = "hand2")
         self.link_lab.pack()
+        
         
         #nutrition_score
         self.nt_lab = ttk.Label(self.monty, text="NUTRI SCORE", font=("Helvetica", font_size))
@@ -122,49 +144,82 @@ class MyApp():
         self.store_lab.pack()
         
         #Description of the product(ingredients) by scrolled text
-        ttk.Label(self.monty, text="Description_ingredients :").pack()
+        ttk.Label(self.monty, text="Description_ingredients :", font=("Helvetica", stat_labels)).pack()
         scrol_w = 50
         scrol_h = 3
-        src = scrolledtext.ScrolledText(self.monty, width = scrol_w, height = scrol_h, wrap = tk.WORD)
-        src.pack()
+        self.src = scrolledtext.ScrolledText(self.monty, width = scrol_w, height = scrol_h, wrap = tk.WORD)
+        self.src.pack()
         
         #creating buttons
         b_width = 30
         # Geting products button
         self.get_prods = ttk.Button(self.monty, text = "obtenir_produits", width = b_width, command = self.get_products)
         self.get_prods.pack()
+        #informations about products button
+        self.exit = ttk.Button(self.monty, text = "Afficher_informations", width = b_width, command = self.getprodinfos)
+        self.exit.pack()
         #exit button
         self.exit = ttk.Button(self.monty, text = "Quitter", width = b_width, command = self.win.destroy)
         self.exit.pack()
-        #informations about products button
-        self.exit = ttk.Button(self.monty, text = "infos_produit", width = b_width, command = self.getprodinfos)
-        self.exit.pack()
+        
+        #------------------------------------The frame for the best product---------------
+        self.monty1 = ttk.LabelFrame(tab1, text='Meilleur produit')
+        self.monty1.pack()
+        
+        # best product name
+        self.best_name_lab = ttk.Label(self.monty1, text= "NOM PRODUIT", font=("Helvetica", font_size))
+        self.best_name_lab.pack()
+        # best product nutri_score
+        self.best_ns_lab = ttk.Label(self.monty1, text= "NUTRI-SCORE", font=("Helvetica", font_size))
+        self.best_ns_lab.pack()
+        # best product link
+        self.best_link_lab = ttk.Label(self.monty1, text= "LIEN", font=("Helvetica", font_size))
+        self.best_link_lab.pack()
         # sauvgarde button
-        self.exit = ttk.Button(self.monty, text = "Enregistrer", width = b_width, command = self.win.destroy)
+        self.exit = ttk.Button(self.monty1, text = "Meilleur_produit", width = b_width, command = self.best_prod)
         self.exit.pack()
-        """
-        #The second box (Lable_Frames) of the best products comparing
+        self.exit = ttk.Button(self.monty1, text = "Enregistrer", width = b_width, command = self.win.destroy)
+        self.exit.pack()
         
-        #secon section in tab1 for best products
-        monty1 = ttk.LabelFrame(tab1, text=' Meilleur Produit ')
-        monty1.grid(column=0, row=5, padx=8, pady=4)
-         
-        #name
-        ttk.Label(monty1, text="Nom :").grid(column=0, row=1,sticky='W')
-        ttk.Label(monty1, text="get name").grid(column=2, row=1,sticky='W')
         
-        #Link
-        ttk.Label(monty1, text="Lien :").grid(column=0, row=2,sticky='W')
-        ttk.Label(monty1, text="get link").grid(column=2, row=2,sticky='E')
         
-        #nutrition_score
-        ttk.Label(monty1, text="Nutrition_score :").grid(column=4, row=1,sticky='E')
-        ttk.Label(monty1, text="get NT").grid(column=5, row=1,sticky='E')
         
-        #store_name
-        ttk.Label(monty1, text="Magasin :").grid(column=4, row=2,sticky='E')
-        ttk.Label(monty1, text="get store").grid(column=5, row=2,sticky='E')
-        """    
+        
+        
+        
+        
+        
     
         #---------------------------------------tab's 2 widgets---------------------------
         
+        
+        
+        #second tab2 for favorit products
+        self.monty2 = ttk.LabelFrame(tab2, text=' Liste des produits favorits ')
+        self.monty2.pack()
+        
+        #List produits
+        scroll = Scrollbar(self.monty2, orient="vertical")
+        self.fav_list_prods = lb(self.monty2, xscrollcommand = scroll, width= 40, height = 17)
+        self.fav_list_prods.pack()
+        
+        #name
+        self.name_fav_lab = ttk.Label(self.monty2, text="Nom :")
+        self.name_fav_lab.pack()
+        
+        #Link
+        self.link_fav_lab = ttk.Label(self.monty2, text="Lien :")
+        self.link_fav_lab.pack()
+        
+        #nutrition_score
+        self.nutri_fav_lab = ttk.Label(self.monty2, text="Nutrition_score :")
+        self.nutri_fav_lab.pack()
+        
+        #store_name
+        self.mag_fav_lab = ttk.Label(self.monty2, text="Magasin :")
+        self.mag_fav_lab.pack()
+        
+        #Show infos button
+        #exit button
+        self.exit = ttk.Button(self.monty2, text = "Obtenir informations", width = b_width, command = self.win.destroy)
+        self.exit.pack()
