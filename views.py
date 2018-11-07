@@ -40,6 +40,8 @@ class MyApp():
         """Method Geting the products"""
         
         name = self.combo_cat.get()# Get datas from the categories  combobox
+        #name = evt.widget.get()
+        print(name)
         self.get_id2 = self.cat.get_to_comboprods + "cat_name ='{}'".format(str(name))# Qery to get the id of the categorie name selected
         self.cursor.execute(self.get_id2)# execute the qery
         got = self.cursor.fetchall()# get the value of the qery with fetch()
@@ -72,11 +74,7 @@ class MyApp():
         
         #get infos
         self.link_lab["text"] = "Lien : "+link_get["link"]
-        
-        if self.store_lab["text"] == "NONE":
-            self.store_lab["text"] = "INCONUE"
-        else:
-            self.store_lab["text"] = "Magasin : +"+mag_get["stores_name"]
+        self.store_lab["text"] = "Magasin : +"+mag_get["stores_name"]
         self.nt_lab["text"] = "Nutri_score: "+nutri_get["nutri_score"]
         self.src.insert(END, desc_get["description"])   
     
@@ -88,14 +86,24 @@ class MyApp():
         got = self.cursor.fetchall()# get the value of the qery with fetch()
         got_id = got[0]["id"]
         #get the best product based on the categorie
-          
-        self.prods.SelectBestProd(str(got_id)) 
-            
+        self.prods.SelectBestNS(str(got_id)) 
+        get_best = self.prods.get_best
+        #get list of nutri_scores based on each categorie slected
+        nutri_scores = []
+        for i in range(len(get_best)):
+            nutri_scores.append(get_best[i]["nutri_score"])
+        alpha_sorted = sorted(nutri_scores)
+        print(alpha_sorted)
+        #get information of the best product
+        self.prods.SelectBestProd(str(got_id), str(alpha_sorted[0]))
         
         
+        self.best_name_lab["text"] = self.prods.get_infos[0]["product_name"]
+        self.best_ns_lab["text"] = self.prods.get_infos[0]["nutri_score"]
+        self.best_link_lab["text"] = self.prods.get_infos[0]["link"]
             
     def createWidgets(self):
-        """This Method where widgets are created"""
+        """Method to creat widgets"""
         
         # Tabs's Control
         tabControl = ttk.Notebook(self.win) 
@@ -116,13 +124,16 @@ class MyApp():
         ttk.Label(self.monty, text="Choisir catégorie :", font=("Helvetica", stat_labels)).pack()
         # widgets of the categories
         self.combo_cat = ttk.Combobox(self.monty, width=18)
+        self.combo_cat.bind('<<ComboboxSelect>>', self.get_products)
         self.combo_cat.pack()
+        
         ttk.Label(self.monty, text="Choisir produit :", font=("Helvetica", stat_labels)).pack()
         
         # Product's widgets
         scroll = Scrollbar(self.monty, orient="vertical")
         self.list_prods = lb(self.monty, xscrollcommand = scroll, width= 40, height = 15)
         self.list_prods.pack()
+        
         
         #Labels Groups
         font_size = 11
@@ -165,7 +176,6 @@ class MyApp():
         #------------------------------------The frame for the best product---------------
         self.monty1 = ttk.LabelFrame(tab1, text='Meilleur produit')
         self.monty1.pack()
-        
         # best product name
         self.best_name_lab = ttk.Label(self.monty1, text= "NOM PRODUIT", font=("Helvetica", font_size))
         self.best_name_lab.pack()

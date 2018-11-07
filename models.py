@@ -48,16 +48,21 @@ class Products():
         #best prod selection
         
         
-    def SelectBestProd(self, categorie):
+    def SelectBestNS(self, categorie):
         
         """This method is made to Show up 
         the informations of the bes product 
         based on the nutrition tags"""
         
-        self.best_prod = "SELECT nutri_score FROM products WHERE id_cat = " + categorie
-        self.cursor.execute(self.best_prod)
+        self.best_ns = "SELECT nutri_score FROM products WHERE id_cat = " + categorie
+        self.cursor.execute(self.best_ns)
         self.get_best = self.cursor.fetchall()
-        print(self.get_best)
+    
+    def SelectBestProd(self, id_categotie, ns):
+        self.best_infos = "SELECT product_name, nutri_score, stores_name,  link FROM products WHERE id_cat = " + id_categotie +" AND nutri_score = '" + ns + "'"
+        self.cursor.execute(self.best_infos)
+        self.get_infos = self.cursor.fetchall()
+        
         
     def create(self):
         """Method to creat table products """
