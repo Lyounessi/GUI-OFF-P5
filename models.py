@@ -73,16 +73,25 @@ class Favorits():
     
     """This class present the favorits table """
     def __init__(self):
-        pass
-       
-    def create(self):
-        pass
-     
-     
-    def insert(self):
+        self.cursor = connect.cursor
+        self.select = "SELECT * FROM " + T_FAV
+        self.ns = "SELECT nutri_score FROM " + T_FAV+ " WHERE "
+        self.link = "SELECT link FROM " + T_FAV + " WHERE "
         
-        pass
+    def create(self):
+        self.creat = "CREATE TABLE "+ T_FAV +" (id INT AUTO_INCREMENT, product_name VARCHAR(100) NOT NULL, nutri_score VARCHAR(120),  link VARCHAR(255), PRIMARY KEY (id),  UNIQUE(product_name))"
+        self.cursor.execute(self.creat)
+     
+     
+    def insert(self, name, ns, link):
+        self.insert = "INSERT INTO "+ T_FAV +" (product_name, nutri_score, link) VALUES (%s, %s, %s)"
+        value = (name, ns, link) 
+        self.cursor.execute(self.insert, value)
+        print(name, ns, link)
+        connect.db.commit()
     
+    
+        
     
 class Cat():
     """This class present the categories table """
@@ -95,6 +104,7 @@ class Cat():
         self.get_cats = "SELECT cat_name FROM categories"    
         self.get_to_comboprods = "SELECT id FROM categories WHERE "
     def creat(self):
+        
         """Method to creat table """
         self.cursor.execute(self.sql)
      
