@@ -47,11 +47,11 @@ class ModelMy():
     def CreatMyClass(self):
         #self.cat.creat()
         #self.prods.create()
-        #self.favs.create()
-        #connect.db.commit()
+        self.favs.create()
+        connect.db.commit()
         pass
     def clean_tables(self):
-        #self.my_base.Cleanclass("products")
+        #self.my_base.Cleanclass("favorits")
         pass
     def Get_Insert_products(self):
         #define the variabl that convert the api requests value as json format
@@ -110,7 +110,7 @@ class ViewMy():
 #run_model = models.MyBase()
 #run_model.CreatMyDB()
 in_modelmy = ModelMy()
-#in_modelmy.CreatMyClass()
+in_modelmy.CreatMyClass()
 #in_modelmy.Get_Insert_products()
 #in_modelmy.clean_tables()
 """View class runs"""
