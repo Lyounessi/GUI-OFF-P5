@@ -1,16 +1,11 @@
-"""All Imports in"""
-
 import tkinter as tk 
 from tkinter import ttk, scrolledtext, Scrollbar, END, ACTIVE
 from tkinter import Listbox as lb
 import connect
 import models
-from models import Products, Favorits, Cat
 import pymysql.cursors
 import webbrowser
  
-"""Class content all widgets indeed"""
-#The new OOP code looks like this:
 class MyApp():
     """This is the global class, making the view and all widgets inside"""
     
@@ -74,16 +69,19 @@ class MyApp():
         desc_get = self.cursor.fetchone()
         
         #get infos
-        self.link_lab["text"] = "Lien : "+link_get["link"]
+        self.link_lab["text"] = link_get["link"]
         self.store_lab["text"] = "Magasin : +"+mag_get["stores_name"]
         self.nt_lab["text"] = "Nutri_score: "+nutri_get["nutri_score"]
         self.src.insert(END, desc_get["description"])   
     
     def ShowBest(self):
-        #best product infos
-        name_cat = self.combo_cat.get()# Get datas from the categories  combobox
-        get_id = self.cat.get_to_comboprods + "cat_name ='{}'".format(str(name_cat))# Qery to get the id of the categorie name selected
-        self.cursor.execute(get_id)# execute the qery
+        """method to print best product information"""
+        # Get datas from the categories  combobox
+        name_cat = self.combo_cat.get()
+        # Qery to get the id of the categorie name selected
+        get_id = self.cat.get_to_comboprods + "cat_name ='{}'".format(str(name_cat))
+        # execute the qery
+        self.cursor.execute(get_id)
         got = self.cursor.fetchall()# get the value of the qery with fetch()
         got_id = got[0]["id"]
         #get the best product based on the categorie
@@ -108,8 +106,10 @@ class MyApp():
                         str(self.best_ns_lab["text"]), 
                         str(self.best_link_lab["text"]))
     
-    """ ----Favorit's Widget methods---- """
+    #----Favorit's Widget methods---- 
     def get_list_prods(self):
+        """method to insert products list based on the 
+        categorie selected for the listbox of products"""
         self.cursor.execute(self.fav.select)
         list_prods = self.cursor.fetchall()
         self.list_prods.delete(0, tk.END)
@@ -131,7 +131,9 @@ class MyApp():
         self.cursor.execute(link)
         exelink = self.cursor.fetchall()
         self.link_fav_lab["text"] = exelink[0]["link"]
+        
     def callback(self, event):
+        """Method to open link in the browser"""
         webbrowser.open_new(event.widget.cget("text"))
             
     def createWidgets(self):
@@ -151,7 +153,7 @@ class MyApp():
         tabControl.pack(expand=2, 
                         fill="both") # Pack make visible
         
-         # ----------------------Tabe's1 widgets---------------------------
+        # ----------------------Tabe's1 widgets---------------------------
         self.monty = ttk.LabelFrame(tab1, 
                                     text=' Liste des Produits ')
         self.monty.pack()
@@ -191,6 +193,8 @@ class MyApp():
                                   font=("Helvetica", font_size), 
                                   cursor = "hand2")
         self.link_lab.pack()
+        self.link_lab.bind("<Button-1>", 
+            self.callback)
         
         
         #nutrition_score
@@ -242,25 +246,31 @@ class MyApp():
         # best product link
         self.best_link_lab = ttk.Label(self.monty1, 
                                        text= "LIEN", 
-                                       font=("Helvetica", font_size))
+                                       font=("Helvetica", font_size),
+                                      cursor = "hand2")
         self.best_link_lab.pack()
+        self.best_link_lab.bind("<Button-1>", 
+                               self.callback)
         # sauvgarde button
-        self.exit = ttk.Button(self.monty1, 
+        self.best_product = ttk.Button(self.monty1, 
                                text = "Meilleur_produit", 
                                width = b_width, 
                                command = self.ShowBest)
-        self.exit.pack()
-        self.exit = ttk.Button(self.monty1, 
+        self.best_product.pack()
+        self.save_best = ttk.Button(self.monty1, 
                                text = "Enregistrer", 
                                width = b_width, 
                                command = self.SaveBest)
-        self.exit.pack()      
+        self.save_best.pack()      
+        #exit button
+        self.exit = ttk.Button(self.monty1, 
+                               text = "Quitter", 
+                               width = b_width, 
+                               command = self.win.destroy)
+        self.exit.pack()
       
     
         #---------------------------------------tab's 2 widgets---------------------------
-        
-        
-        
         #second tab2 for favorit products
         self.monty2 = ttk.LabelFrame(tab2, 
                                      text=' Liste des produits favorits ')
@@ -297,10 +307,8 @@ class MyApp():
                                self.callback)
         
       
-        
-        #
         self.exit = ttk.Button(self.monty2, 
-                               text = "Aficcher produits", 
+                               text = "Afficher produits", 
                                width = b_width, 
                                command = self.get_list_prods)
         self.exit.pack()

@@ -13,6 +13,10 @@ Before using the application, make sure you have instaled the requirements.
 - tkinter
 - mysql
 
+# PS DATABASE
+
+No script avaible for the database, cause it was made by methods inside the file models.py
+
 # MVC's files
 
 - controler.py :

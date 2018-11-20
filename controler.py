@@ -1,24 +1,14 @@
 """Imports Parts"""
-# urllib python
 import urllib.parse
-#Requests API Imports
 import requests
 import pymysql.cursors
-#Models Imports
 import models
-from models import Cat, Products, MyBase
-#Views Imports
 import views
-from views import MyApp
-#connexion Import
 import connect
-#Constants import
-import constant
-
-
+from constant import PREFIX_URL
 
 class ModelMy():
-    """Yuup"""
+    """class to execute the models querys"""
     def __init__(self):
         #define the cursor of pymysql to manipulate datas
         self.cursor = connect.cursor
@@ -41,19 +31,23 @@ class ModelMy():
             'page' : '1',
             'json' : '1'
         }
-        prefixe_url = 'https://fr.openfoodfacts.org/cgi/search.pl?'
-        url = prefixe_url + urllib.parse.urlencode(suffixe_url_element)
+        url = PREFIX_URL + urllib.parse.urlencode(suffixe_url_element)
         return url    
     def CreatMyClass(self):
+        """method to creat tables in the
+        database as python code"""
         #self.cat.creat()
         #self.prods.create()
-        self.favs.create()
-        connect.db.commit()
+        #self.favs.create()
+        #connect.db.commit()
         pass
     def clean_tables(self):
+        """method to delete tables from the DB"""
         #self.my_base.Cleanclass("favorits")
         pass
     def Get_Insert_products(self):
+        """method to get products from the 
+        api and insert them inthe table"""
         #define the variabl that convert the api requests value as json format
         my_req = self.req.json()
         #define the key products that have all the data indeed as content inside the json dict
@@ -61,7 +55,6 @@ class ModelMy():
         #getting the id form categories table, situeted in the models
         self.cursor.execute(self.prods.get_id)
         got = self.cursor.fetchall()
-        #print(got[0]["id"])
         api_product = []
         #loop to eskape the double products valus in the products table
         for i in range(20):
@@ -73,7 +66,8 @@ class ModelMy():
                 api_product.append(prods[i])
         print(len(api_product))
         print(api_product[0]["product_name"], api_product[0]["stores_tags"])
-        """execute the query of insert from models and insert all the specific data in the table products"""
+        """execute the query of insert from models and 
+        insert all the specific data in the table products"""
         for i in range(len(api_product)):
             val = (api_product[i]["product_name"], 
                    int(got[0]["id"]), 
@@ -85,7 +79,7 @@ class ModelMy():
             
         connect.db.commit()
 class ViewMy():
-    
+    """Class for the Views"""
     def __init__(self):
         #define the cursor of pymysql to manipulate datas
         self.cursor = connect.cursor
@@ -98,19 +92,25 @@ class ViewMy():
         self.cats_val = ()
     def GetData_ToCats(self):
         """This Method used to append data into the categorie's combobox in the view"""
-        self.cursor.execute(self.cat.get_cats) # execute the query of selecting all datas from the categories
-        my_cats = self.cursor.fetchall() # geting the value of the query
-        self.cats_val =(my_cats[0]["cat_name"], my_cats[1]["cat_name"], my_cats[2]["cat_name"], my_cats[3]["cat_name"]) # making a tuple having the cat_name's datas
-        #print(type(self.app.combo_cat))#test if the attribut in the view is called in the controler
-        self.app.combo_cat['values'] = self.cats_val # insert the values of the tuple self.cats_val in the combobox of categories
-        #print(self.app.combo_cat['values']) # test of values if they are in the combobox
+        # execute the query of selecting all datas from the categories
+        self.cursor.execute(self.cat.get_cats) 
+        # geting the value of the query
+        my_cats = self.cursor.fetchall() 
+        # making a tuple having the cat_name's datas
+        self.cats_val =(my_cats[0]["cat_name"], 
+                        my_cats[1]["cat_name"], 
+                        my_cats[2]["cat_name"], 
+                        my_cats[3]["cat_name"]) 
+         # insert the values of the tuple self.cats_val in the combobox of categories
+        self.app.combo_cat['values'] = self.cats_val
     def RuMe(self):
+        """method to run the application with a loop"""
         self.app.win.mainloop()
 """Model run and execution"""
 #run_model = models.MyBase()
 #run_model.CreatMyDB()
 in_modelmy = ModelMy()
-in_modelmy.CreatMyClass()
+#in_modelmy.CreatMyClass()
 #in_modelmy.Get_Insert_products()
 #in_modelmy.clean_tables()
 """View class runs"""
