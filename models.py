@@ -15,7 +15,7 @@ class MyBase():
         """method to creat the database"""
         self.cursor.execute(self.db)
     def Cleanclass(self, nom_table):
-        """method to delete tables"""" 
+        """method to delete tables"""
         self.drop_class = "DROP TABLE " + nom_table
         self.cursor.execute(self.drop_class)
 
